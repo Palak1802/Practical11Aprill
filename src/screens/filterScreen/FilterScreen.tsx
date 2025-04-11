@@ -1,5 +1,5 @@
 import {View, Text} from 'react-native';
-import React from 'react';
+import React, {useCallback} from 'react';
 import styles from './filterScreen.style';
 import RangeSlider from 'rn-range-slider';
 import useFilterScreen from './useFilterScreen';
@@ -7,23 +7,32 @@ import {CustomStatusBar, Header} from '@componentIndex';
 
 const FilterScreen: React.FC = () => {
   const {onFilterPress, value, onValueChangePrice} = useFilterScreen();
-  const renderPriceThumb = (item: string) => (
-    <>
-      <View style={styles.thumbStyleView} />
-      <View
-        style={[
-          item == 'low'
-            ? styles.priceLabelLowViewStyle
-            : styles.priceLabelViewStyle,
-        ]}>
-        <Text allowFontScaling={false} style={styles.labelSliderText}>
-          {item == 'low' ? value?.lowPrice : value?.highPrice}
-        </Text>
-      </View>
-    </>
+  const renderPriceThumb = useCallback(
+    (item: string) => (
+      <>
+        <View style={styles.thumbStyleView} />
+        <View
+          style={[
+            item == 'low'
+              ? styles.priceLabelLowViewStyle
+              : styles.priceLabelViewStyle,
+          ]}>
+          <Text allowFontScaling={false} style={styles.labelSliderText}>
+            {item == 'low' ? value?.lowPrice : value?.highPrice}
+          </Text>
+        </View>
+      </>
+    ),
+    [value],
   );
-  const renderRail = () => <View style={styles.unSelectSliderStyle} />;
-  const renderRailSelected = () => <View style={styles.selectSliderStyle} />;
+  const renderRail = useCallback(
+    () => <View style={styles.unSelectSliderStyle} />,
+    [],
+  );
+  const renderRailSelected = useCallback(
+    () => <View style={styles.selectSliderStyle} />,
+    [],
+  );
   return (
     <View style={styles.modalMainContainer}>
       <CustomStatusBar />
@@ -41,7 +50,7 @@ const FilterScreen: React.FC = () => {
           renderThumb={renderPriceThumb}
           renderRail={renderRail}
           renderRailSelected={renderRailSelected}
-          onValueChanged={onValueChangePrice}
+          onValueChanged={(low, high) => onValueChangePrice(low, high)}
           low={value?.lowPrice}
           high={value?.highPrice}
         />

@@ -3,4 +3,5 @@ export default {
   heartEmpty: require('./image/like.png'),
   back: require('./image/back.png'),
   filter: require('./image/filter.png'),
+  star: require('./image/star.png'),
 };

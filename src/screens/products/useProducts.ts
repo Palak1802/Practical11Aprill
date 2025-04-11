@@ -17,22 +17,11 @@ const useProducts = () => {
     maxPrice: 0,
     lowPrice: 0,
     highPrice: 0,
+    filterModal: false,
   });
   useEffect(() => {
     getProductList();
   }, []);
-  // useEffect(() => {
-  //   if (params?.highPrice! > 0) {
-  //     let tempProducts = value?.products?.map((val: ProductsList) => {
-  //       const highPrise = Number(params?.highPrice);
-  //       const lowPrise = Number(params?.lowPrice);
-  //       const matchesPrice = val?.price >= lowPrise && val?.price <= highPrise;
-  //       console.log('matchesPrice', matchesPrice);
-  //       return matchesPrice;
-  //     });
-  //     // setValue('products', tempProducts);
-  //   }
-  // }, [params?.highPrice, params?.lowPrice]);
   useEffect(() => {
     if (wishlistProducts?.length > 0) {
       wishlistData();
@@ -85,11 +74,7 @@ const useProducts = () => {
     navigation.navigate('wishlist');
   };
   const onFilterPress = () => {
-    navigation.navigate('filterScreen', {
-      maxPrice: value?.maxPrice,
-      lowPrice: value?.lowPrice,
-      highPrice: value?.highPrice,
-    });
+    setValue('filterModal', true);
   };
   const onSearch = (text: string) => {
     setValue('searchText', text);
@@ -109,6 +94,18 @@ const useProducts = () => {
       getProductList();
     }
   };
+  const onPriceLowToHigh = () => {
+    value?.products?.sort((a, b) => a.price - b.price);
+    setValue('filterModal', false);
+  };
+  const onPriceHighToLow = () => {
+    value?.products?.sort((a, b) => b.price - a.price);
+    setValue('filterModal', false);
+  };
+  const onSortbyRating = () => {
+    value?.products?.sort((a, b) => b.rating.rate - a.rating.rate);
+    setValue('filterModal', false);
+  };
   return {
     value,
     onItemPress,
@@ -116,6 +113,9 @@ const useProducts = () => {
     onWishlist,
     onFilterPress,
     onSearch,
+    onPriceLowToHigh,
+    onPriceHighToLow,
+    onSortbyRating,
   };
 };
 

@@ -18,4 +18,5 @@ interface ProductsState {
   maxPrice: number;
   lowPrice: number;
   highPrice: number;
+  filterModal: boolean;
 }

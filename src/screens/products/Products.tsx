@@ -1,4 +1,11 @@
-import {View, Text, FlatList, Image, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  Modal,
+} from 'react-native';
 import React from 'react';
 import useProducts from './useProducts';
 import styles from './products.style';
@@ -14,6 +21,9 @@ const Products: React.FC = () => {
     onWishlist,
     onFilterPress,
     onSearch,
+    onPriceLowToHigh,
+    onPriceHighToLow,
+    onSortbyRating,
   } = useProducts();
   return (
     <View style={styles.container}>
@@ -60,12 +70,42 @@ const Products: React.FC = () => {
                 <Text style={styles.itemTitle} numberOfLines={1}>
                   {item?.title}
                 </Text>
-                <Text style={styles.itemPrice}>{item?.price}</Text>
+                <View style={styles.rowViewStyle}>
+                  <Text style={styles.itemPrice}>{item?.price}</Text>
+                  <Text style={styles.itemRating}>{item?.rating?.rate} </Text>
+                  <Image source={imageIndex.star} style={styles.starIcon} />
+                </View>
               </View>
             </TouchableOpacity>
           );
         }}
       />
+      <Modal visible={value?.filterModal} transparent statusBarTranslucent>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalMainContainer}>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={styles.lowToHighTouch}
+              onPress={onPriceLowToHigh}>
+              <Text style={styles.optionText}>Low to High Price</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={styles.lowToHighTouch}
+              onPress={onPriceHighToLow}>
+              <Text style={styles.optionText}>High To Low Price</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={styles.lowToHighTouch}
+              onPress={onSortbyRating}>
+              <Text style={[styles.optionText, {borderBottomWidth: 0}]}>
+                Sort by Rating
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
